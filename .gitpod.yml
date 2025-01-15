@@ -1,0 +1,25 @@
+# .gitpod.yml
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  # random utilities
+  - init: |
+      chmod +x setup.sh
+      ./setup.sh
+  - command: |
+      bash s3/bash-scripts/list_objects.sh
+
+vscode:
+  extensions:
+    - ms-vscode.bash-debug
+
+# Define environment variables, if needed
+variables:
+  OUTPUT_DIR: /tmp/s3-bash-scripts
+
+# Prebuild section to prepare the workspace before the user opens it
+prebuilds:
+  - init: |
+      mkdir -p $OUTPUT_DIR
+      echo "== Setup complete =="

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+echo "== list bucket"
+
+# Get the list of bucket names sorted by creation date in descending order
+buckets=$(aws s3api list-buckets --query "Buckets[?CreationDate!=null]|sort_by(@, &CreationDate)[::-1].Name" --output text)
+
+# Convert the output into an array
+buckets_array=($buckets)
+
+# Check if the number of buckets is greater than 5
+if [ ${#buckets_array[@]} -gt 5 ]; then
+    # Print the top 5 bucket names
+    for i in {0..4}; do
+        echo "${buckets_array[i]}"
+    done
+    # Print ellipsis
+    echo "..."
+else
+    # Print all bucket names if there are 5 or fewer
+    for bucket in "${buckets_array[@]}"; do
+        echo "$bucket"
+    done
+fi

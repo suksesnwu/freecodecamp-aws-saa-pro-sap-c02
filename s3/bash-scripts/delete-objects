@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+echo "== delete objects from bucket"
+
+# Exit immediately if any command returns a non-zero status
+set -e 
+
+# Check for bucket name
+if [ -z "$1" ]; then
+    echo "There needs to be a bucket name eg. ./delete-objects my-bucket-name"
+    exit 1
+fi
+
+BUCKET_NAME=$1
+
+# Check for object keys
+if [ -z "$2" ]; then
+    echo "There needs to be an object key or a list of keys eg. ./delete-objects my-bucket-name my-object-key"
+    exit 1
+fi
+
+OBJECT_KEYS="$2"
+
+# Delete objects
+for KEY in $OBJECT_KEYS; do
+    aws s3api delete-object --bucket "$BUCKET_NAME" --key "$KEY"
+    echo "Deleted $KEY from $BUCKET_NAME"
+done
