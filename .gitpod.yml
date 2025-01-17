@@ -3,23 +3,13 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
+  - name: terraform
+    before: |
+      wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+      sudo apt update && sudo apt install terraform
   # random utilities
-  - init: |
-      chmod +x setup.sh
-      ./setup.sh
-  - command: |
-      bash s3/bash-scripts/list_objects.sh
+  - name: utils
+    before: |
+      sudp apt-get install tree
 
-vscode:
-  extensions:
-    - ms-vscode.bash-debug
-
-# Define environment variables, if needed
-variables:
-  OUTPUT_DIR: /tmp/s3-bash-scripts
-
-# Prebuild section to prepare the workspace before the user opens it
-prebuilds:
-  - init: |
-      mkdir -p $OUTPUT_DIR
-      echo "== Setup complete =="
