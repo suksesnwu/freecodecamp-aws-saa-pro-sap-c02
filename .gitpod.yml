@@ -13,3 +13,7 @@ tasks:
     before: |
       sudp apt-get install tree
 
+  - name: cdk
+    before: |
+      npm i -g aws-cdk
+
