@@ -25,11 +25,15 @@ aws s3api head-object --bucket checksums-matleza --key myfile.txt
 ## Let's upload a file using a different kind of checksum
 
 ```sh
-sudo apt install rhash -y
-rhash --crc32 --simple myfile.txt
+bundle exec ruby crc.rb
 ```
 
-cksum -o 3 -b myfile.txt
+```sh
+aws s3api put-object \
+--bucket checksums-matleza \
+--key="myfilecrc32.txt" \
+--body=myfile.txt" \
+--checksum-algorithm="CRC32" \
+--checksum-crc32="4027661802"
+```
 
---checksum-algorithm="CRC32"
---checksum-crc32
